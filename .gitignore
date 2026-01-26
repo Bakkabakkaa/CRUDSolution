@@ -1,0 +1,42 @@
+# Rider / IntelliJ IDEA
+.idea/
+*.iml
+
+# Build results
+bin/
+obj/
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Logs
+*.log
+
+# Visual Studio Code
+.vscode/
+
+# NuGet packages
+*.nupkg
+*.snupkg
+packages/
+# Uncomment если используешь пакетный restore
+# !packages/README.md
+
+# DotCover
+.idea/.dotCover
+
+# Resharper
+_ReSharper*/
+*.[Rr]e[Ss]harper
+
+# Rider system files
+.idea/workspace.xml
+.idea/tasks.xml
+.idea/dictionaries
+.idea/httpRequests
+
+# ASP.NET scaffolding
+ScaffoldingReadMe.txt
