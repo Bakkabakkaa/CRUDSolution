@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CRUDSolution", "CRUDSolution\CRUDSolution.csproj", "{3A6D199E-C6BD-45A2-9D90-E2F3BE758226}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CRUDTests", "CRUDTests\CRUDTests.csproj", "{244285BE-085B-44C6-9633-9ABBD1286ECE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{3A6D199E-C6BD-45A2-9D90-E2F3BE758226}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3A6D199E-C6BD-45A2-9D90-E2F3BE758226}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3A6D199E-C6BD-45A2-9D90-E2F3BE758226}.Release|Any CPU.Build.0 = Release|Any CPU
+		{244285BE-085B-44C6-9633-9ABBD1286ECE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{244285BE-085B-44C6-9633-9ABBD1286ECE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{244285BE-085B-44C6-9633-9ABBD1286ECE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{244285BE-085B-44C6-9633-9ABBD1286ECE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
