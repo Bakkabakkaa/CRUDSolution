@@ -46,7 +46,7 @@ public class CountriesServiceTest
     
     //When the CountryName is duplicate, it should throw ArgumentException
     [Fact]
-    public void AddCountry_DuplicateCpuntryName()
+    public void AddCountry_DuplicateCountryName()
     {
         //Arrange
         CountryAddRequest? request1 = new CountryAddRequest()
