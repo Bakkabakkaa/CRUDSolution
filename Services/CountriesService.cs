@@ -42,4 +42,9 @@ public class CountriesService : ICountriesService
 
         return country.ToCountryResponse();
     }
+
+    public List<CountryResponse> GetAllCountries()
+    {
+        throw new NotImplementedException();
+    }
 }
