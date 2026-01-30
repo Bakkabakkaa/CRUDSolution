@@ -1,6 +1,8 @@
+using System.ComponentModel.DataAnnotations;
 using Entities;
 using ServiceContracts;
 using ServiceContracts.DTO;
+using Services.Helpers;
 
 namespace Services;
 
@@ -14,14 +16,7 @@ public class PersonsService : IPersonsService
         _persons = new List<Person>();
         _countriesService = new CountriesService();
     }
-
-    private PersonResponse ConvertPersonToPersonResponse(Person person)
-    {
-        PersonResponse personResponse = person.ToPersonResponse();
-        personResponse.Country = _countriesService.GetCountryByCountryID(person.CountryID)?.CountryName;
-
-        return personResponse;
-    }
+    
     public PersonResponse AddPerson(PersonAddRequest? personAddRequest)
     {
         // Check if PersonAddRequest is not null
@@ -30,11 +25,8 @@ public class PersonsService : IPersonsService
             throw new ArgumentNullException(nameof(personAddRequest));
         }
         
-        // Validate PersonName
-        if (string.IsNullOrEmpty(personAddRequest.PersonName))
-        {
-            throw new ArgumentException("Personname can't be blank");
-        }
+        // Model validations
+        ValidationHelper.ModelValidation(personAddRequest);
         
         // Convert personAddRequest into Person type
         Person person = personAddRequest.ToPerson();
@@ -53,5 +45,13 @@ public class PersonsService : IPersonsService
     public List<PersonResponse> GetAllPersons()
     {
         throw new NotImplementedException();
+    }
+    
+    private PersonResponse ConvertPersonToPersonResponse(Person person)
+    {
+        PersonResponse personResponse = person.ToPersonResponse();
+        personResponse.Country = _countriesService.GetCountryByCountryID(person.CountryID)?.CountryName;
+
+        return personResponse;
     }
 }
