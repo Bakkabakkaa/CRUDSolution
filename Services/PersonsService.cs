@@ -64,6 +64,11 @@ public class PersonsService : IPersonsService
         return person.ToPersonResponse();
     }
 
+    public List<PersonResponse> GetFilteredPersons(string searchBy, string? searchString)
+    {
+        throw new NotImplementedException();
+    }
+
     private PersonResponse ConvertPersonToPersonResponse(Person person)
     {
         PersonResponse personResponse = person.ToPersonResponse();
