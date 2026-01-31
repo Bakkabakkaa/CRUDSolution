@@ -3,6 +3,7 @@ using ServiceContracts.DTO;
 using Services;
 using ServiceContracts.Enums;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace CRUDTests;
 
@@ -10,11 +11,13 @@ public class PersonsServiceTests
 {
     private readonly IPersonsService _personsService;
     private readonly ICountriesService _countriesService;
+    private readonly ITestOutputHelper _testOutputHelper;
 
-    public PersonsServiceTests()
+    public PersonsServiceTests(ITestOutputHelper testOutputHelper)
     {
         _personsService = new PersonsService();
         _countriesService = new CountriesService();
+        _testOutputHelper = testOutputHelper;
     }
 
     #region AddPerson
@@ -183,8 +186,22 @@ public class PersonsServiceTests
             person_response_list_from_add.Add(person_response);
         }
         
+        // Print person_response_list_fron_add
+        _testOutputHelper.WriteLine("Expected:");
+        foreach (var person_response_from_add in  person_response_list_from_add)
+        {
+            _testOutputHelper.WriteLine(person_response_from_add.ToString());
+        }
+        
         // Act
         List<PersonResponse> person_list_from_get = _personsService.GetAllPersons();
+        
+        // Print person_response_list_fron_get
+        _testOutputHelper.WriteLine("Actual:");
+        foreach (var person_response_from_get in  person_list_from_get)
+        {
+            _testOutputHelper.WriteLine(person_response_from_get.ToString());
+        }
         
         // Assert
         foreach (var person_response_from_add in person_response_list_from_add)
