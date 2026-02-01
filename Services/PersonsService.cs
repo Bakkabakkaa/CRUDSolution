@@ -207,6 +207,11 @@ public class PersonsService : IPersonsService
         return matchingPerson.ToPersonResponse();
     }
 
+    public bool DeletePerson(Guid personID)
+    {
+        throw new NotImplementedException();
+    }
+
     private PersonResponse ConvertPersonToPersonResponse(Person person)
     {
         PersonResponse personResponse = person.ToPersonResponse();
