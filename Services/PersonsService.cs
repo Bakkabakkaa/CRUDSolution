@@ -209,7 +209,21 @@ public class PersonsService : IPersonsService
 
     public bool DeletePerson(Guid personID)
     {
-        throw new NotImplementedException();
+        if (personID == null)
+        {
+            throw new ArgumentNullException(nameof(personID));
+        }
+
+        Person? person = _persons.FirstOrDefault(temp => temp.PersonID == personID);
+        if (person != null)
+        {
+            _persons.Remove(person);
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     private PersonResponse ConvertPersonToPersonResponse(Person person)
