@@ -180,7 +180,31 @@ public class PersonsService : IPersonsService
 
     public PersonResponse UpdatePerson(PersonUpdateRequest? personUpdateRequest)
     {
-        throw new NotImplementedException();
+        if (personUpdateRequest == null)
+        {
+            throw new ArgumentNullException(nameof(Person));
+        }
+        
+        // Validation
+        ValidationHelper.ModelValidation(personUpdateRequest);
+        
+        // Get matching person object to update
+        Person? matchingPerson = _persons.FirstOrDefault(temp => temp.PersonID == personUpdateRequest.PersonID);
+        if (matchingPerson == null)
+        {
+            throw new AggregateException("Given person id doesn't exist");
+        }
+        
+        // Update all details
+        matchingPerson.PersonName = personUpdateRequest.PersonName;
+        matchingPerson.Email = personUpdateRequest.Email;
+        matchingPerson.DateOfBirth = personUpdateRequest.DateOfBirth;
+        matchingPerson.Gender = personUpdateRequest.Gender.ToString();
+        matchingPerson.CountryID = personUpdateRequest.CountryID;
+        matchingPerson.Address = personUpdateRequest.Address;
+        matchingPerson.ReceiveNewsLetters = personUpdateRequest.ReceiveNewsLetters;
+
+        return matchingPerson.ToPersonResponse();
     }
 
     private PersonResponse ConvertPersonToPersonResponse(Person person)

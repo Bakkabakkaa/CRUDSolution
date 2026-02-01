@@ -503,7 +503,8 @@ public class PersonsServiceTests
         CountryResponse country_response_from_add = _countriesService.AddCountry(country_add_request);
         PersonAddRequest person_add_request = new PersonAddRequest()
         {
-            PersonName = "Smith", CountryID = country_response_from_add.CountryID
+            PersonName = "Smith", CountryID = country_response_from_add.CountryID,
+            Email = "smith@example.com", Address = "address..", Gender = GenderOptions.Male
         };
         PersonResponse person_response_from_add = _personsService.AddPerson(person_add_request);
         PersonUpdateRequest person_update_request = person_response_from_add.ToPersonUpdateRequest();
