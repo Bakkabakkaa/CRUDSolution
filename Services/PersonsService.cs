@@ -178,6 +178,11 @@ public class PersonsService : IPersonsService
         return sortedPerson;
     }
 
+    public PersonResponse UpdatePerson(PersonUpdateRequest? personUpdateRequest)
+    {
+        throw new NotImplementedException();
+    }
+
     private PersonResponse ConvertPersonToPersonResponse(Person person)
     {
         PersonResponse personResponse = person.ToPersonResponse();
