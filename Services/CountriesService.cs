@@ -8,9 +8,40 @@ public class CountriesService : ICountriesService
 {
     private readonly List<Country> _countries;
 
-    public CountriesService()
+    public CountriesService(bool initialize = true)
     {
         _countries = new List<Country>();
+        if (initialize)
+        {
+            _countries.AddRange(new List<Country>()
+            {
+                new Country()
+                {
+                    CountryID = Guid.Parse("3F0243A7-1B3A-4ACD-AD63-11151BFF251A"),
+                    CountryName = "USA"
+                },
+                new Country()
+                {
+                    CountryID = Guid.Parse("DED50EEE-E1A4-46D4-B6E4-21AE22FFF791"),
+                    CountryName = "Canada"
+                },
+                new Country()
+                {
+                    CountryID = Guid.Parse("B8D30CF2-AD9C-4598-86CE-C372787D6B02"),
+                    CountryName = "UK"
+                },
+                new Country()
+                {
+                    CountryID = Guid.Parse("FFE0511A-DE54-46B3-AB4B-43FD7D753049"),
+                    CountryName = "India"
+                },
+                new Country()
+                {
+                    CountryID = Guid.Parse("834F1F53-BC40-474E-826C-FAFC00F25467"),
+                    CountryName = "Australia"
+                }
+            });
+        }
     }
     public CountryResponse AddCountry(CountryAddRequest? countryAddRequest)
     {
