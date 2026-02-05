@@ -8,10 +8,12 @@ namespace CRUDSolution.Controllers;
 public class PersonController : Controller
 {
     private readonly IPersonsService _personsService;
+    private readonly ICountriesService _countriesService;
 
-    public PersonController(IPersonsService personsService)
+    public PersonController(IPersonsService personsService, ICountriesService countriesService)
     {
         _personsService = personsService;
+        _countriesService = countriesService;
     }
     [Route("persons/index")]
     [Route("/")]
@@ -39,5 +41,16 @@ public class PersonController : Controller
         ViewBag.CurrentSortOrder = sortOrder.ToString();
         
         return View(sortedPersons);
+    }
+
+    // Executes when the user clicks on "Crete Person" hyperlink (while opening the create view)
+    [Route("persons/create")]
+    [HttpGet]
+    public IActionResult Create()
+    {
+        List<CountryResponse> countries =  _countriesService.GetAllCountries();
+        ViewBag.Countries = countries;
+        
+        return View();
     }
 }
