@@ -59,7 +59,7 @@ public class PersonsService : IPersonsService
 
     public List<PersonResponse> GetAllPersons()
     {
-        return _persons.Select(temp => temp.ToPersonResponse()).ToList();
+        return _persons.Select(temp => ConvertPersonToPersonResponse(temp)).ToList();
     }
 
     public PersonResponse? GetPersonByPersonID(Guid? personID)
@@ -76,7 +76,7 @@ public class PersonsService : IPersonsService
             return null;
         }
 
-        return person.ToPersonResponse();
+        return ConvertPersonToPersonResponse(person);
     }
 
     public List<PersonResponse> GetFilteredPersons(string searchBy, string? searchString)
@@ -218,7 +218,7 @@ public class PersonsService : IPersonsService
         matchingPerson.Address = personUpdateRequest.Address;
         matchingPerson.ReceiveNewsLetters = personUpdateRequest.ReceiveNewsLetters;
 
-        return matchingPerson.ToPersonResponse();
+        return ConvertPersonToPersonResponse(matchingPerson);
     }
 
     public bool DeletePerson(Guid personID)
