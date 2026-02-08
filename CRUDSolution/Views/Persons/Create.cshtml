@@ -63,12 +63,8 @@
                 <label for="CountryID" class="form-label">Country</label>
             </div>
             <div class="flex-1">
-                <select asp-for="CountryID" class="form-input">
+                <select asp-for="CountryID" class="form-input" asp-items="ViewBag.Countries">
                     <option value="">Please Select</option>
-                    @foreach (CountryResponse country in ViewBag.Countries)
-                    {
-                        <option value="@country.CountryID">@country.CountryName</option>
-                    }
                 </select>
             </div>
         </div>
