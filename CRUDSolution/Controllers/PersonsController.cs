@@ -104,4 +104,36 @@ public class PersonsController : Controller
         
         return View(personUpdateRequest);
     }
+
+    [HttpPost]
+    [Route("[action]/{personID}")]
+    public IActionResult Edit(PersonUpdateRequest personUpdateRequest)
+    {
+        PersonResponse? personResponse = _personsService.GetPersonByPersonID(personUpdateRequest.PersonID);
+
+        if (personResponse == null)
+        {
+            return RedirectToAction("Index");
+        }
+
+        if (ModelState.IsValid)
+        { 
+            PersonResponse updatePerson = _personsService.UpdatePerson(personUpdateRequest);
+            return RedirectToAction("Index");
+        }
+        else
+        {
+            List<CountryResponse> countries = _countriesService.GetAllCountries();
+            ViewBag.Countries = countries.Select(temp => new SelectListItem()
+            {
+                Text = temp.CountryName, Value = temp.CountryID.ToString()
+            });
+
+            ViewBag.Errors = ModelState.Values
+                .SelectMany(v => v.Errors)
+                .Select(e => e.ErrorMessage).ToList();
+
+            return View();
+        }
+    }
 }

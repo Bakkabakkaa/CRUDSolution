@@ -10,6 +10,8 @@
 <div class="w-50">
     <form asp-controller="Persons" asp-action="Edit" method="post">
         
+        <input type="hidden" asp-for="PersonID"/>
+
         @*PersonName*@
         <div class="form-field flex">
             <div class="w-25">
@@ -20,7 +22,7 @@
                 <span asp-validation-for="PersonName" class="text-red"></span>
             </div>
         </div>
-        
+
         @*Email*@
         <div class="form-field flex">
             <div class="w-25">
@@ -31,7 +33,7 @@
                 <span asp-validation-for="Email" class="text-red"></span>
             </div>
         </div>
-        
+
         @*DateOfBirth*@
         <div class="form-field flex">
             <div class="w-25">
@@ -42,7 +44,7 @@
                 <span asp-validation-for="DateOfBirth" class="text-red"></span>
             </div>
         </div>
-        
+
         @*Gender*@
         <div class="form-field flex">
             <div class="w-25">
@@ -60,7 +62,7 @@
                 <span asp-validation-for="Gender" class="text-red"></span>
             </div>
         </div>
-        
+
         @*Country*@
         <div class="form-field flex">
             <div class="w-25">
@@ -73,7 +75,7 @@
                 <span asp-validation-for="CountryID" class="text-red"></span>
             </div>
         </div>
-        
+
         @*Address*@
         <div class="form-field flex">
             <div class="w-25">
@@ -84,7 +86,7 @@
                 <span asp-validation-for="Address" class="text-red"></span>
             </div>
         </div>
-        
+
         @*ReceiveNewsLetters*@
         <div class="form-field flex">
             <div class="w-25">
@@ -95,7 +97,7 @@
                 <span asp-validation-for="ReceiveNewsLetters" class="text-red"></span>
             </div>
         </div>
-        
+
         @*Submit*@
         <div class="form-field flex">
             <div class="w-25">
