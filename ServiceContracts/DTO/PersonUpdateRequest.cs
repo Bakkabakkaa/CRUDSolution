@@ -36,6 +36,7 @@ public class PersonUpdateRequest
             Email = this.Email,
             DateOfBirth = this.DateOfBirth,
             Gender = this.Gender.ToString(),
+            Address = Address,
             CountryID = this.CountryID,
             ReceiveNewsLetters = this.ReceiveNewsLetters
         };

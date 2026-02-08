@@ -68,6 +68,7 @@ public class PersonResponse
             Email = this.Email,
             DateOfBirth = this.DateOfBirth,
             Gender = (GenderOptions)Enum.Parse(typeof(GenderOptions), Gender, true),
+            CountryID = this.CountryID,
             Address = this.Address,
             ReceiveNewsLetters = this.ReceiveNewsLetters
         };

@@ -17,6 +17,8 @@ public class PersonsController : Controller
         _personsService = personsService;
         _countriesService = countriesService;
     }
+    
+    [HttpGet]
     [Route("index")]
     [Route("/")]
     public IActionResult Index(string searchBy, string? searchString,
@@ -79,5 +81,27 @@ public class PersonsController : Controller
         
         // Navigation to Index() action method (it makes another get request to "persons/index")
         return RedirectToAction("Index", "Persons");
+    }
+
+    [HttpGet]
+    [Route("[action]/{personID}")]
+    public IActionResult Edit(Guid personID)
+    {
+        PersonResponse? personResponse = _personsService.GetPersonByPersonID(personID);
+
+        if (personResponse == null)
+        {
+            return RedirectToAction("Index");
+        }
+
+        PersonUpdateRequest personUpdateRequest = personResponse.ToPersonUpdateRequest();
+        
+        List<CountryResponse> countries = _countriesService.GetAllCountries();
+        ViewBag.Countries = countries.Select(temp => new SelectListItem()
+        {
+            Text = temp.CountryName, Value = temp.CountryID.ToString()
+        });
+        
+        return View(personUpdateRequest);
     }
 }
