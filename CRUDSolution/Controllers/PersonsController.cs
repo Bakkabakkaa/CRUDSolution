@@ -136,4 +136,16 @@ public class PersonsController : Controller
             return View();
         }
     }
+
+    [HttpGet]
+    [Route(("[action]/{personID}"))]
+    public IActionResult Delete(Guid personID)
+    {
+        PersonResponse? personResponse = _personsService.GetPersonByPersonID(personID);
+
+        if (personResponse == null)
+            return RedirectToAction("Index");
+
+        return View(personResponse);
+    }
 }
