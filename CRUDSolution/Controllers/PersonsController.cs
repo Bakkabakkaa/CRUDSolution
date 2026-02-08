@@ -5,6 +5,7 @@ using ServiceContracts.Enums;
 
 namespace CRUDSolution.Controllers;
 
+[Route("persons")]
 public class PersonsController : Controller
 {
     private readonly IPersonsService _personsService;
@@ -15,7 +16,7 @@ public class PersonsController : Controller
         _personsService = personsService;
         _countriesService = countriesService;
     }
-    [Route("persons/index")]
+    [Route("index")]
     [Route("/")]
     public IActionResult Index(string searchBy, string? searchString,
         string sortBy = nameof(PersonResponse.PersonName), SortOrderOptions sortOrder = SortOrderOptions.ASC)
@@ -45,7 +46,7 @@ public class PersonsController : Controller
 
     // Executes when the user clicks on "Crete Person" hyperlink (while opening the create view)
     [HttpGet]
-    [Route("persons/create")]
+    [Route("create")]
     public IActionResult Create()
     {
         List<CountryResponse> countries = _countriesService.GetAllCountries();
@@ -55,7 +56,7 @@ public class PersonsController : Controller
     }
 
     [HttpPost]
-    [Route("persons/create")]
+    [Route("create")]
     public IActionResult Create(PersonAddRequest personAddRequest)
     {
         if (!ModelState.IsValid)
