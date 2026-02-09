@@ -1,3 +1,4 @@
+using Entities;
 using ServiceContracts;
 using Services;
 
@@ -8,6 +9,8 @@ builder.Services.AddControllersWithViews();
 // Add services into IoC container
 builder.Services.AddSingleton<ICountriesService, CountriesService>();
 builder.Services.AddSingleton<IPersonsService, PersonsService>();
+
+builder.Services.AddDbContext<PersonsDbContext>();
 
 var app = builder.Build();
 
