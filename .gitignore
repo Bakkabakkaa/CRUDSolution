@@ -15,8 +15,16 @@ obj/
 # Logs
 *.log
 
-# Visual Studio Code
-.vscode/
+# Visual Studio и временные файлы
+.vs/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+*.opendb
+*.db
+*.db-shm
+*.db-wal
 
 # NuGet packages
 *.nupkg

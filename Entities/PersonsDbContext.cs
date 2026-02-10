@@ -7,6 +7,11 @@ public class PersonsDbContext :DbContext
     public DbSet<Country> Countries { get; set; }
     public DbSet<Person> Persons { get; set; }
 
+    public PersonsDbContext(DbContextOptions options) : base(options)
+    {
+        
+    }
+    
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -19,7 +24,7 @@ public class PersonsDbContext :DbContext
 
         List<Country>? countries = System.Text.Json.JsonSerializer.Deserialize<List<Country>>(countriesJson);
 
-        foreach (var country in Countries)
+        foreach (var country in countries)
         {
             modelBuilder.Entity<Country>().HasData(country);
         }
