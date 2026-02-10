@@ -8,7 +8,7 @@ public class CountriesService : ICountriesService
 {
     private readonly PersonsDbContext _db;
 
-    public CountriesService(PersonsDbContext personsDbContext, bool initialize = true)
+    public CountriesService(PersonsDbContext personsDbContext)
     {
         _db = personsDbContext;
     }
