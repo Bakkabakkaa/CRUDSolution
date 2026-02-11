@@ -29,4 +29,6 @@ public class Person
     
     // Bit
     public bool ReceiveNewsLetters { get; set; }
+    
+    public string? TIN { get; set; }
 }
