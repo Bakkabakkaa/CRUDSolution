@@ -15,20 +15,20 @@ public interface IPersonsService
     /// <param name="personAddRequest">Person to add</param>
     /// <returns>Returns the same person details,
     /// along with newly generated PersonID</returns>
-    PersonResponse AddPerson(PersonAddRequest? personAddRequest);
+    Task<PersonResponse> AddPerson(PersonAddRequest? personAddRequest);
 
     /// <summary>
     /// Returns all persons
     /// </summary>
     /// <returns>Returns a list of objects of PersonResponse type</returns>
-    List<PersonResponse> GetAllPersons();
+    Task<List<PersonResponse>> GetAllPersons();
 
     /// <summary>
     /// Returns the person object based on the given person id
     /// </summary>
     /// <param name="personID">Person id to search</param>
     /// <returns>Returns matching person object</returns>
-    PersonResponse? GetPersonByPersonID(Guid? personID);
+    Task<PersonResponse?> GetPersonByPersonID(Guid? personID);
 
     /// <summary>
     /// Returns all person objects that matches with the given
@@ -38,7 +38,7 @@ public interface IPersonsService
     /// <param name="searchString">Search string to search</param>
     /// <returns>Returns all matching persons based on the given search
     /// field and search string</returns>
-    List<PersonResponse> GetFilteredPersons(string searchBy, string? searchString);
+    Task<List<PersonResponse>> GetFilteredPersons(string searchBy, string? searchString);
     
     /// <summary>
     /// Returns sorted list of persons
@@ -48,7 +48,7 @@ public interface IPersonsService
     /// the persons should be sorted</param>
     /// <param name="sortOrder">ASC or DESC</param>
     /// <returns>Returns sorted persons as PersonResponse list</returns>
-    List<PersonResponse> GetSortedPersons(List<PersonResponse> allPerson, string sortBy, SortOrderOptions sortOrder);
+    Task<List<PersonResponse>> GetSortedPersons(List<PersonResponse> allPerson, string sortBy, SortOrderOptions sortOrder);
 
     /// <summary>
     /// Updates the specified person details based on the given person ID
@@ -56,7 +56,7 @@ public interface IPersonsService
     /// <param name="personUpdateRequest">Person details to update,
     /// including person id</param>
     /// <returns>Returns the person response object</returns>
-    PersonResponse UpdatePerson(PersonUpdateRequest? personUpdateRequest);
+    Task<PersonResponse> UpdatePerson(PersonUpdateRequest? personUpdateRequest);
 
     /// <summary>
     /// Deletes a person based on the given person id
@@ -64,5 +64,5 @@ public interface IPersonsService
     /// <param name="personID">PersonID to delete</param>
     /// <returns>Returns true, if the deletion is successful;
     /// otherwise false</returns>
-    bool DeletePerson(Guid personID);
+    Task<bool> DeletePerson(Guid personID);
 }
