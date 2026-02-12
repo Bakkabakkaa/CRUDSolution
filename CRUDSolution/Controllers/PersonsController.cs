@@ -182,4 +182,12 @@ public class PersonsController : Controller
             PageOrientation = Rotativa.AspNetCore.Options.Orientation.Landscape
         };
     }
+
+    [Route("PersonsCSV")]
+    public async Task<IActionResult> PersonsCSV()
+    {
+        MemoryStream memoryStream = await _personsService.GetPersonsCSV();
+
+        return File(memoryStream, "application/octet-stream", "persons.csv");
+    }
 }
