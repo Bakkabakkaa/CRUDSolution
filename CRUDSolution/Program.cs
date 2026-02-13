@@ -1,8 +1,10 @@
 using Entities;
 using Microsoft.EntityFrameworkCore;
+using OfficeOpenXml;
 using ServiceContracts;
 using Services;
 
+ExcelPackage.License.SetNonCommercialPersonal("CRUDSolution");
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();

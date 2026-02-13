@@ -190,4 +190,12 @@ public class PersonsController : Controller
 
         return File(memoryStream, "application/octet-stream", "persons.csv");
     }
+
+    [Route("PersonsExcel")]
+    public async Task<IActionResult> PersonsExcel()
+    {
+        MemoryStream memoryStream = await _personsService.GetPersonsExcel();
+
+        return File(memoryStream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "persons.xlsx");
+    }
 }
