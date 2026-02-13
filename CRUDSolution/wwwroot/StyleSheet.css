@@ -450,4 +450,24 @@ a.link-hover:hover
         width: 70%;
         margin: auto;
     }
+
+    .form-field>div
+    {
+        padding: 15px !important;
+    }
+
+    .form-field>div:first-child
+    {
+        flex: 1 !important;
+    }
+
+    .form-field > div:nth-child(2)
+    {
+        flex: 3 !important;
+    }
+
+    .form-field
+    {
+        flex-direction: row;
+    }
 }
