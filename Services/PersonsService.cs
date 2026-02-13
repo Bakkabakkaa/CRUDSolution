@@ -284,7 +284,7 @@ public class PersonsService : IPersonsService
     public async Task<MemoryStream> GetPersonsExcel()
     {
         MemoryStream memoryStream = new MemoryStream();
-        using (ExcelPackage excelPackage = new ExcelPackage())
+        using (ExcelPackage excelPackage = new ExcelPackage(memoryStream))
         {
             ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets.Add("PersonsSheet");
             worksheet.Cells["A1"].Value = "Person Name";
@@ -295,6 +295,13 @@ public class PersonsService : IPersonsService
             worksheet.Cells["F1"].Value = "Country";
             worksheet.Cells["G1"].Value = "Address";
             worksheet.Cells["H1"].Value = "Receive News Letters";
+
+            using (ExcelRange headerCells = worksheet.Cells["A1:H1"])
+            {
+                headerCells.Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                headerCells.Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.Gray);
+                headerCells.Style.Font.Bold = true;
+            }
 
             int row = 2;
             List<PersonResponse> persons =
