@@ -1,27 +1,37 @@
 ﻿using Entities;
+using Microsoft.EntityFrameworkCore;
 using RepositoryContracts;
 
 namespace Repositories;
 
 public class CountriesRepository : ICountriesRepository
 {
-    public Task<Country> AddCountry(Country country)
+    private readonly ApplicationDbContext _db;
+
+    public CountriesRepository(ApplicationDbContext db)
     {
-        throw new NotImplementedException();
+        _db = db;
+    }
+    public async Task<Country> AddCountry(Country country)
+    {
+        _db.Countries.Add(country);
+        await _db.SaveChangesAsync();
+
+        return country;
     }
 
-    public Task<List<Country>> GetAllCountries()
+    public async Task<List<Country>> GetAllCountries()
     {
-        throw new NotImplementedException();
+        return await _db.Countries.ToListAsync();
     }
 
-    public Task<Country?> GetCountryByCountryID(Guid countryID)
+    public async Task<Country?> GetCountryByCountryID(Guid countryID)
     {
-        throw new NotImplementedException();
+        return await _db.Countries.FirstOrDefaultAsync(temp => temp.CountryID == countryID);
     }
 
-    public Task<Country?> GetCountryByCountryName(string countryName)
+    public async Task<Country?> GetCountryByCountryName(string countryName)
     {
-        throw new NotImplementedException();
+        return await _db.Countries.FirstOrDefaultAsync(temp => temp.CountryName == countryName);
     }
 }
