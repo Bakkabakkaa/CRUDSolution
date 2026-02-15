@@ -1,38 +1,69 @@
 using System.Linq.Expressions;
 using Entities;
+using Microsoft.EntityFrameworkCore;
 using RepositoryContracts;
 
 namespace Repositories;
 
 public class PersonsRepository : IPersonsRepository
 {
-    public Task<Person> AddPerson(Person person)
+    private readonly ApplicationDbContext _db;
+
+    public PersonsRepository(ApplicationDbContext db)
     {
-        throw new NotImplementedException();
+        _db = db;
+    }
+    public async Task<Person> AddPerson(Person person)
+    {
+        _db.Persons.Add(person);
+        await _db.SaveChangesAsync();
+
+        return person;
     }
 
-    public Task<List<Person>> GetAllPerson()
+    public async Task<List<Person>> GetAllPerson()
     {
-        throw new NotImplementedException();
+        return await _db.Persons.Include("Country").ToListAsync();
     }
 
-    public Task<Person> GetPersonByPersonID(Guid personID)
+    public async Task<Person?> GetPersonByPersonID(Guid personID)
     {
-        throw new NotImplementedException();
+        return await _db.Persons.Include("Country")
+            .FirstOrDefaultAsync(temp => temp.PersonID == personID);
     }
 
-    public Task<List<Person>> GetFilteredPersons(Expression<Func<Person, bool>> predicate)
+    public async Task<List<Person>> GetFilteredPersons(Expression<Func<Person, bool>> predicate)
     {
-        throw new NotImplementedException();
+        return await _db.Persons.Include("Country")
+            .Where(predicate)
+            .ToListAsync();
     }
 
-    public Task<bool> DeletePersonByPersonID(Guid personID)
+    public async Task<bool> DeletePersonByPersonID(Guid personID)
     {
-        throw new NotImplementedException();
+        _db.Persons.RemoveRange(_db.Persons.Where(temp => temp.PersonID == personID));
+        int rowsDeleted = await _db.SaveChangesAsync();
+
+        return rowsDeleted > 0;
     }
 
-    public Task<Person> UpdatesPerson(Person person)
+    public async Task<Person> UpdatesPerson(Person person)
     {
-        throw new NotImplementedException();
+        Person? matchingPerson = await _db.Persons.FirstOrDefaultAsync(temp => temp.PersonID == person.PersonID);
+
+        if (matchingPerson == null)
+            return person;
+
+        matchingPerson.PersonName = person.PersonName;
+        matchingPerson.Email = person.Email;
+        matchingPerson.DateOfBirth = person.DateOfBirth;
+        matchingPerson.Gender = person.Gender;
+        matchingPerson.CountryID = person.CountryID;
+        matchingPerson.Address = person.Address;
+        matchingPerson.ReceiveNewsLetters = person.ReceiveNewsLetters;
+
+        int countUpdated = await _db.SaveChangesAsync();
+
+        return matchingPerson;
     }
 }
