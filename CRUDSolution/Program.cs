@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using OfficeOpenXml;
 using ServiceContracts;
 using Services;
+using RepositoryContracts;
+using Repositories;
 
 ExcelPackage.License.SetNonCommercialPersonal("CRUDSolution");
 var builder = WebApplication.CreateBuilder(args);
@@ -12,6 +14,8 @@ builder.Services.AddControllersWithViews();
 // Add services into IoC container
 builder.Services.AddScoped<ICountriesService, CountriesService>();
 builder.Services.AddScoped<IPersonsService, PersonsService>();
+builder.Services.AddScoped<ICountriesRepository, CountriesRepository>();
+builder.Services.AddScoped<IPersonsRepository, PersonsRepository>();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {

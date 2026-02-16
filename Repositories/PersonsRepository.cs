@@ -21,7 +21,7 @@ public class PersonsRepository : IPersonsRepository
         return person;
     }
 
-    public async Task<List<Person>> GetAllPerson()
+    public async Task<List<Person>> GetAllPersons()
     {
         return await _db.Persons.Include("Country").ToListAsync();
     }

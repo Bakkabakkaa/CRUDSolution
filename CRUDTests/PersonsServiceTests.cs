@@ -31,8 +31,8 @@ public class PersonsServiceTests
         dbContextMock.CreateDbSetMock(temp => temp.Persons, personsInitialData);
         dbContextMock.CreateDbSetMock(temp => temp.Countries, countriesInitialData);
         
-        _countriesService = new CountriesService(dbContext);
-        _personsService = new PersonsService(dbContext, _countriesService);
+        _countriesService = new CountriesService(null);
+        _personsService = new PersonsService(null);
         
         _testOutputHelper = testOutputHelper;
         _fixture = new Fixture();
@@ -358,7 +358,7 @@ public class PersonsServiceTests
         //        {
         //            Assert.Contains(person_response_from_add, person_list_from_search);
         //        }
-        //    }
+        //    } 
         //}
 
         person_list_from_search.Should().OnlyContain(temp => temp.PersonName

@@ -19,7 +19,7 @@ public interface IPersonsRepository
     /// Returns all persons in the data store
     /// </summary>
     /// <returns>List of person objects from table</returns>
-    Task<List<Person>> GetAllPerson();
+    Task<List<Person>> GetAllPersons();
 
     /// <summary>
     /// Returns a person object based on the given person id
