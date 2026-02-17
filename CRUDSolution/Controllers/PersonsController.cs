@@ -69,12 +69,11 @@ public class PersonsController : Controller
         if (!ModelState.IsValid)
         {
             List<CountryResponse> countries = await _countriesService.GetAllCountries();
-            ViewBag.Countries = countries;
-            ViewBag.Errors = ModelState.Values
-                .SelectMany(v => v.Errors)
-                .Select(e=> e.ErrorMessage).ToList();
-        
-            return View();
+            ViewBag.Countries = countries.Select(temp =>
+                new SelectListItem() { Text = temp.CountryName, Value = temp.CountryID.ToString() });
+
+            ViewBag.Errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+            return View(personAddRequest);
         }
 
         // Call the service method
