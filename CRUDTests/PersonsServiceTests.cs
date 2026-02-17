@@ -18,7 +18,6 @@ namespace CRUDTests;
 public class PersonsServiceTests
 {
     private readonly IPersonsService _personsService;
-    private readonly ICountriesService _countriesService;
     private readonly IPersonsRepository _personsRepository;
     private readonly Mock<IPersonsRepository> _personRepositoryMock;
     private readonly ITestOutputHelper _testOutputHelper;
@@ -31,17 +30,6 @@ public class PersonsServiceTests
         _personRepositoryMock = new Mock<IPersonsRepository>();
         _personsRepository = _personRepositoryMock.Object;
         
-        List<Person> personsInitialData = new List<Person>() { };
-        List<Country> countriesInitialData = new List<Country>() { };
-
-        DbContextMock<ApplicationDbContext> dbContextMock = new DbContextMock<ApplicationDbContext>(
-            new DbContextOptionsBuilder<ApplicationDbContext>().Options);
-
-        ApplicationDbContext dbContext = dbContextMock.Object;
-        dbContextMock.CreateDbSetMock(temp => temp.Persons, personsInitialData);
-        dbContextMock.CreateDbSetMock(temp => temp.Countries, countriesInitialData);
-        
-        _countriesService = new CountriesService(null);
         _personsService = new PersonsService(_personsRepository);
         
         _testOutputHelper = testOutputHelper;
