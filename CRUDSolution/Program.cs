@@ -9,6 +9,9 @@ using Repositories;
 ExcelPackage.License.SetNonCommercialPersonal("CRUDSolution");
 var builder = WebApplication.CreateBuilder(args);
 
+// Logging
+builder.Logging.ClearProviders().AddConsole().AddDebug().AddEventLog();
+
 builder.Services.AddControllersWithViews();
 
 // Add services into IoC container
