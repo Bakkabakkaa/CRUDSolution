@@ -14,6 +14,7 @@ obj/
 
 # Logs
 *.log
+Logs/
 
 # Visual Studio и временные файлы
 .vs/

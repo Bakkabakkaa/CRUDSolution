@@ -5,12 +5,19 @@ using ServiceContracts;
 using Services;
 using RepositoryContracts;
 using Repositories;
+using Serilog;
 
 ExcelPackage.License.SetNonCommercialPersonal("CRUDSolution");
 var builder = WebApplication.CreateBuilder(args);
 
-// Logging
-builder.Logging.ClearProviders().AddConsole().AddDebug().AddEventLog();
+// Serilog
+builder.Host.UseSerilog((HostBuilderContext context, IServiceProvider serviceProvider,
+    LoggerConfiguration loggerConfiguration) =>
+{
+    loggerConfiguration
+        .ReadFrom.Configuration(context.Configuration) // Read configuration from built in IConfiguration
+        .ReadFrom.Services(serviceProvider); // Read out current app's services and make them available to serilog
+});
 
 builder.Services.AddControllersWithViews();
 
