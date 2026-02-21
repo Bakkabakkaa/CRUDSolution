@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using OfficeOpenXml;
 using RepositoryContracts;
+using Serilog;
 using ServiceContracts;
 using ServiceContracts.DTO;
 using ServiceContracts.Enums;
@@ -18,10 +19,13 @@ public class PersonsService : IPersonsService
 {
     private readonly IPersonsRepository _personsRepository;
     private readonly ILogger<PersonsService> _logger;
-    public PersonsService(IPersonsRepository personsRepository, ILogger<PersonsService> logger)
+    private readonly IDiagnosticContext _diagnosticContext;
+    public PersonsService(IPersonsRepository personsRepository, ILogger<PersonsService> logger,
+        IDiagnosticContext diagnosticContext)
     {
         _personsRepository = personsRepository;
         _logger = logger;
+        _diagnosticContext = diagnosticContext;
     }
     
     public async Task<PersonResponse> AddPerson(PersonAddRequest? personAddRequest)
@@ -110,6 +114,8 @@ public class PersonsService : IPersonsService
 
             _ => await _personsRepository.GetAllPersons()
         };
+        
+        _diagnosticContext.Set("Persons", persons);
         
         return persons.Select(temp => temp.ToPersonResponse()).ToList();
     }
