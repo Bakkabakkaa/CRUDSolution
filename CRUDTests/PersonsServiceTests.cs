@@ -10,8 +10,11 @@ using Xunit;
 using Xunit.Abstractions;
 using AutoFixture;
 using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using Moq;
 using RepositoryContracts;
+using Serilog;
+using Serilog.Extensions.Hosting;
 
 namespace CRUDTests;
 
@@ -29,8 +32,11 @@ public class PersonsServiceTests
 
         _personRepositoryMock = new Mock<IPersonsRepository>();
         _personsRepository = _personRepositoryMock.Object;
+
+        var diagnosticContextMock = new Mock<IDiagnosticContext>();
+        var loggerMock = new Mock<ILogger<PersonsService>>();
         
-        _personsService = new PersonsService(_personsRepository);
+        _personsService = new PersonsService(_personsRepository, loggerMock.Object, diagnosticContextMock.Object);
         
         _testOutputHelper = testOutputHelper;
     }
