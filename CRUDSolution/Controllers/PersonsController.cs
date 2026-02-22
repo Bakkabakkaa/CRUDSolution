@@ -11,8 +11,8 @@ namespace CRUDSolution.Controllers;
 [Route("persons")]
 [TypeFilter(typeof(ResponseHeaderActionFilter), Arguments = new object[]
 {
-    "My-Key-From-Controller", "My-Value-From-Controller"
-}, Order = 2)]
+    "My-Key-From-Controller", "My-Value-From-Controller", 3
+}, Order = 3)]
 public class PersonsController : Controller
 {
     private readonly IPersonsService _personsService;
@@ -29,10 +29,10 @@ public class PersonsController : Controller
     [HttpGet]
     [Route("index")]
     [Route("/")]
-    [TypeFilter(typeof(PersonsListActionFilter))]
+    [TypeFilter(typeof(PersonsListActionFilter), Order = 4)]
     [TypeFilter(typeof(ResponseHeaderActionFilter), Arguments = new object[]
     {
-        "My-Key-From-Action", "My-Value-From-Controller"
+        "My-Key-From-Action", "My-Value-From-Controller", 1
     }, Order = 1)]
     public async Task<IActionResult> Index(string searchBy, string? searchString,
         string sortBy = nameof(PersonResponse.PersonName), SortOrderOptions sortOrder = SortOrderOptions.ASC)
