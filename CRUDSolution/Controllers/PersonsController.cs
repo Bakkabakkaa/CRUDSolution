@@ -26,6 +26,10 @@ public class PersonsController : Controller
     [Route("index")]
     [Route("/")]
     [TypeFilter(typeof(PersonsListActionFilter))]
+    [TypeFilter(typeof(ResponseHeaderActionFilter), Arguments = new object[]
+    {
+        "X-Custom-Key", "Custom-Value"
+    })]
     public async Task<IActionResult> Index(string searchBy, string? searchString,
         string sortBy = nameof(PersonResponse.PersonName), SortOrderOptions sortOrder = SortOrderOptions.ASC)
     {
@@ -43,6 +47,10 @@ public class PersonsController : Controller
     // Executes when the user clicks on "Crete Person" hyperlink (while opening the create view)
     [HttpGet]
     [Route("create")]
+    [TypeFilter(typeof(ResponseHeaderActionFilter), Arguments = new object[]
+    {
+        "my-key", "my-value"
+    })]
     public async Task<IActionResult> Create()
     {
         List<CountryResponse> countries = await _countriesService.GetAllCountries();
