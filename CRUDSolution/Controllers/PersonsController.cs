@@ -12,7 +12,7 @@ namespace CRUDSolution.Controllers;
 [TypeFilter(typeof(ResponseHeaderActionFilter), Arguments = new object[]
 {
     "My-Key-From-Controller", "My-Value-From-Controller"
-})]
+}, Order = 2)]
 public class PersonsController : Controller
 {
     private readonly IPersonsService _personsService;
@@ -33,7 +33,7 @@ public class PersonsController : Controller
     [TypeFilter(typeof(ResponseHeaderActionFilter), Arguments = new object[]
     {
         "My-Key-From-Action", "My-Value-From-Controller"
-    })]
+    }, Order = 1)]
     public async Task<IActionResult> Index(string searchBy, string? searchString,
         string sortBy = nameof(PersonResponse.PersonName), SortOrderOptions sortOrder = SortOrderOptions.ASC)
     {
