@@ -1,16 +1,54 @@
 using Microsoft.AspNetCore.Mvc.Filters;
+using ServiceContracts.DTO;
 
 namespace CRUDSolution.Filters.ActionFilters;
 
 public class PersonsListActionFilter : IActionFilter
 {
+    private readonly ILogger<PersonsListActionFilter> _logger;
+
+    public PersonsListActionFilter(ILogger<PersonsListActionFilter> logger)
+    {
+        _logger = logger;
+    }
+    
     public void OnActionExecuting(ActionExecutingContext context)
     {
-        throw new NotImplementedException();
+        // To do: add before logic here
+        _logger.LogInformation("PersonsListActionFilter.OnActionExecuting method");
+
+        if (context.ActionArguments.ContainsKey("searchBy"))
+        {
+            string? searchBy = Convert.ToString(context.ActionArguments["searchBy"]);
+            
+            // Validate the searchBy parameter value
+            if (!string.IsNullOrEmpty(searchBy))
+            {
+                var searchByOptions = new List<string>()
+                {
+                    nameof(PersonResponse.PersonName), nameof(PersonResponse.Email),
+                    nameof(PersonResponse.DateOfBirth), nameof(PersonResponse.Gender),
+                    nameof(PersonResponse.CountryID), nameof(PersonResponse.Address)
+                };
+
+                // Reset the searchBy parameter value
+                if (searchByOptions.Any(temp => temp == searchBy) == false)
+                {
+                    _logger.LogInformation("searchBy actual value {searchBy}", searchBy);
+                    context.ActionArguments["searchBy"] = nameof(PersonResponse.PersonName);
+                    _logger.LogInformation("searchBy updated value {searchBy}", context.ActionArguments["searchBy"]);
+                }
+            }
+        }
+
+        
+
+        
     }
 
     public void OnActionExecuted(ActionExecutedContext context)
     {
-        throw new NotImplementedException();
+        // To do: add after logic here
+        _logger.LogInformation("PersonsListActionFilter.OnActionExecuted method");
     }
 }
