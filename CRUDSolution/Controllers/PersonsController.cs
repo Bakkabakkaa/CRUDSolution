@@ -9,6 +9,10 @@ using ServiceContracts.Enums;
 namespace CRUDSolution.Controllers;
 
 [Route("persons")]
+[TypeFilter(typeof(ResponseHeaderActionFilter), Arguments = new object[]
+{
+    "My-Key-From-Controller", "My-Value-From-Controller"
+})]
 public class PersonsController : Controller
 {
     private readonly IPersonsService _personsService;
@@ -28,7 +32,7 @@ public class PersonsController : Controller
     [TypeFilter(typeof(PersonsListActionFilter))]
     [TypeFilter(typeof(ResponseHeaderActionFilter), Arguments = new object[]
     {
-        "X-Custom-Key", "Custom-Value"
+        "My-Key-From-Action", "My-Value-From-Controller"
     })]
     public async Task<IActionResult> Index(string searchBy, string? searchString,
         string sortBy = nameof(PersonResponse.PersonName), SortOrderOptions sortOrder = SortOrderOptions.ASC)

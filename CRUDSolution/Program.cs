@@ -1,3 +1,4 @@
+using CRUDSolution.Filters.ActionFilters;
 using Entities;
 using Microsoft.EntityFrameworkCore;
 using OfficeOpenXml;
@@ -19,7 +20,14 @@ builder.Host.UseSerilog((HostBuilderContext context, IServiceProvider servicePro
         .ReadFrom.Services(serviceProvider); // Read out current app's services and make them available to serilog
 });
 
-builder.Services.AddControllersWithViews();
+var logger = builder.Services.BuildServiceProvider().GetRequiredService<ILogger<ResponseHeaderActionFilter>>();
+
+// It adds controllers and views as services
+builder.Services.AddControllersWithViews(options =>
+{
+    // options.Filters.Add<ResponseHeaderActionFilter>();
+    options.Filters.Add(new ResponseHeaderActionFilter(logger, "My-Key-From-Global", "My-Value-From-Global"));
+});
 
 // Add services into IoC container
 builder.Services.AddScoped<ICountriesService, CountriesService>();
