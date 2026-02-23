@@ -1,5 +1,6 @@
 using CRUDSolution.Filters.ActionFilters;
 using CRUDSolution.Filters.AuthorizationFilter;
+using CRUDSolution.Filters.ExceptionFilters;
 using CRUDSolution.Filters.ResourceFilters;
 using CRUDSolution.Filters.ResultFilters;
 using Microsoft.AspNetCore.Mvc;
@@ -16,6 +17,7 @@ namespace CRUDSolution.Controllers;
 {
     "My-Key-From-Controller", "My-Value-From-Controller", 3
 }, Order = 3)]
+[TypeFilter(typeof(HandleExceptionFilter))]
 public class PersonsController : Controller
 {
     private readonly IPersonsService _personsService;
