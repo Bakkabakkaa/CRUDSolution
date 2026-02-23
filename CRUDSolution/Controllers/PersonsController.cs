@@ -1,4 +1,5 @@
 using CRUDSolution.Filters.ActionFilters;
+using CRUDSolution.Filters.ResourceFilters;
 using CRUDSolution.Filters.ResultFilters;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -71,6 +72,7 @@ public class PersonsController : Controller
     [HttpPost]
     [Route("create")]
     [TypeFilter(typeof(PersonCreateAndEditPostActionFilter))]
+    [TypeFilter(typeof(FeatureDisabledResourceFilter), Arguments = new object[] { false })]
     public async Task<IActionResult> Create(PersonAddRequest personRequest)
     {
         // Call the service method
