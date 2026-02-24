@@ -36,7 +36,7 @@ public class PersonsController : Controller
     [HttpGet]
     [Route("index")]
     [Route("/")]
-    [TypeFilter(typeof(PersonsListActionFilter), Order = 4)]
+    [ServiceFilter(typeof(PersonsListActionFilter), Order = 4)]
     [TypeFilter(typeof(ResponseHeaderActionFilter), Arguments = new object[]
     {
         "My-Key-From-Action", "My-Value-From-Controller", 1
