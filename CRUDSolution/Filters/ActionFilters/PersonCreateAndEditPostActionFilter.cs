@@ -9,10 +9,13 @@ namespace CRUDSolution.Filters.ActionFilters;
 public class PersonCreateAndEditPostActionFilter : IAsyncActionFilter
 {
     private readonly ICountriesService _countriesService;
+    private readonly ILogger<PersonCreateAndEditPostActionFilter> _logger;
 
-    public PersonCreateAndEditPostActionFilter(ICountriesService countriesService)
+    public PersonCreateAndEditPostActionFilter(ICountriesService countriesService,
+        ILogger<PersonCreateAndEditPostActionFilter> logger)
     {
         _countriesService = countriesService;
+        _logger = logger;
     }
     
     public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
@@ -43,5 +46,6 @@ public class PersonCreateAndEditPostActionFilter : IAsyncActionFilter
         }
         
         //TO DO: after logic
+        _logger.LogInformation("In after logic of PersonCreateAndEditPostActionFilter");
     }
 }
