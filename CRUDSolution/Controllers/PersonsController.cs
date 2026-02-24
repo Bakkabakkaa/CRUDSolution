@@ -1,3 +1,4 @@
+using CRUDSolution.Filters;
 using CRUDSolution.Filters.ActionFilters;
 using CRUDSolution.Filters.AuthorizationFilter;
 using CRUDSolution.Filters.ExceptionFilters;
@@ -18,6 +19,7 @@ namespace CRUDSolution.Controllers;
     "My-Key-From-Controller", "My-Value-From-Controller", 3
 }, Order = 3)]
 [TypeFilter(typeof(HandleExceptionFilter))]
+[TypeFilter(typeof(PersonsAlwaysRunResultFilter))]
 public class PersonsController : Controller
 {
     private readonly IPersonsService _personsService;
@@ -40,6 +42,7 @@ public class PersonsController : Controller
         "My-Key-From-Action", "My-Value-From-Controller", 1
     }, Order = 1)]
     [TypeFilter(typeof(PersonsListResultFilter))]
+    [SkipFilter]
     public async Task<IActionResult> Index(string searchBy, string? searchString,
         string sortBy = nameof(PersonResponse.PersonName), SortOrderOptions sortOrder = SortOrderOptions.ASC)
     {

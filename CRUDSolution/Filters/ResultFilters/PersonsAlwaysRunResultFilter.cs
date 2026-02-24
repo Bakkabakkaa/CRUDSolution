@@ -6,7 +6,12 @@ public class PersonsAlwaysRunResultFilter : IAlwaysRunResultFilter
 {
     public void OnResultExecuting(ResultExecutingContext context)
     {
-        throw new NotImplementedException();
+        if (context.Filters.OfType<SkipFilter>().Any())
+        {
+            return;
+        }
+        
+        //TO DO: before logic here
     }
 
     public void OnResultExecuted(ResultExecutedContext context)
