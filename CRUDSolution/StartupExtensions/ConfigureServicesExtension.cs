@@ -10,7 +10,7 @@ namespace CRUDSolution;
 
 public static class ConfigureServicesExtension
 {
-    public static void ConfigureServices(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection ConfigureServices(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddTransient<ResponseHeaderActionFilter>();
 // It adds controllers and views as services
@@ -41,5 +41,7 @@ public static class ConfigureServicesExtension
         });
 
         services.AddTransient<PersonsListActionFilter>();
+
+        return services;
     }
 }
