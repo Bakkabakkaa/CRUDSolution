@@ -8,6 +8,7 @@ using Services;
 using RepositoryContracts;
 using Repositories;
 using Serilog;
+using CRUDSolution.Middleware;
 
 ExcelPackage.License.SetNonCommercialPersonal("CRUDSolution");
 var builder = WebApplication.CreateBuilder(args);
@@ -25,12 +26,17 @@ builder.Services.ConfigureServices(builder.Configuration);
 
 var app = builder.Build();
 
-app.UseSerilogRequestLogging();
 
 if (builder.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
 }
+else
+{
+    app.UseExceptionHandlingMiddleware();
+}
+
+app.UseSerilogRequestLogging();
 
 app.UseHttpLogging();
 
