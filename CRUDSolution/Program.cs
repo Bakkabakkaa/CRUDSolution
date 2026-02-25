@@ -1,3 +1,4 @@
+using CRUDSolution;
 using CRUDSolution.Filters.ActionFilters;
 using Entities;
 using Microsoft.EntityFrameworkCore;
@@ -20,35 +21,7 @@ builder.Host.UseSerilog((HostBuilderContext context, IServiceProvider servicePro
         .ReadFrom.Services(serviceProvider); // Read out current app's services and make them available to serilog
 });
 
-builder.Services.AddTransient<ResponseHeaderActionFilter>();
-// It adds controllers and views as services
-builder.Services.AddControllersWithViews(options =>
-{
-    // options.Filters.Add<ResponseHeaderActionFilter>();
-    var logger = builder.Services.BuildServiceProvider().GetRequiredService<ILogger<ResponseHeaderActionFilter>>();
-    options.Filters.Add(new ResponseHeaderActionFilter(logger)
-    {
-        Key = "My-Key-From-Global",
-        Value = "My-Value-From-Global",
-        Order = 2
-    });
-});
-
-// Add services into IoC container
-builder.Services.AddScoped<ICountriesService, CountriesService>();
-builder.Services.AddScoped<IPersonsService, PersonsService>();
-builder.Services.AddScoped<ICountriesRepository, CountriesRepository>();
-builder.Services.AddScoped<IPersonsRepository, PersonsRepository>();
-builder.Services.AddHttpLogging(options =>
-{
-    options.LoggingFields = Microsoft.AspNetCore.HttpLogging.HttpLoggingFields.RequestProperties | Microsoft.AspNetCore.HttpLogging.HttpLoggingFields.ResponsePropertiesAndHeaders;
-}); 
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-{
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-});
-
-builder.Services.AddTransient<PersonsListActionFilter>();
+builder.Services.ConfigureServices(builder.Configuration);
 
 var app = builder.Build();
 
