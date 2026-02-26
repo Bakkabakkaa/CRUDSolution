@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CRUDSolution.Controllers;
@@ -5,8 +6,15 @@ namespace CRUDSolution.Controllers;
 public class HomeController : Controller
 {
     [Route("Error")]
-    public IActionResult Index()
+    public IActionResult Error()
     {
-        return View();
+        IExceptionHandlerPathFeature? exceptionHandlerPathFeature = HttpContext.Features.Get<IExceptionHandlerPathFeature>();
+
+        if (exceptionHandlerPathFeature != null && exceptionHandlerPathFeature.Error != null)
+        {
+            ViewBag.ErrorMessage = exceptionHandlerPathFeature.Error.Message;
+        }
+        
+        return View(); // View/Shared/Error
     }
 }

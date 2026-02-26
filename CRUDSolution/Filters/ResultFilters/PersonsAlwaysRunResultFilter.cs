@@ -16,6 +16,5 @@ public class PersonsAlwaysRunResultFilter : IAlwaysRunResultFilter
 
     public void OnResultExecuted(ResultExecutedContext context)
     {
-        throw new NotImplementedException();
     }
 }

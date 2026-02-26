@@ -3,6 +3,7 @@ using System.Globalization;
 using CsvHelper;
 using CsvHelper.Configuration;
 using Entities;
+using Exceptions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using OfficeOpenXml;
@@ -206,7 +207,7 @@ public class PersonsService : IPersonsService
         Person? matchingPerson = await _personsRepository.GetPersonByPersonID(personUpdateRequest.PersonID);
         if (matchingPerson == null)
         {
-            throw new AggregateException("Given person id doesn't exist");
+            throw new InvalidPersonIDException("Given person id doesn't exist");
         }
         
         // Update all details
