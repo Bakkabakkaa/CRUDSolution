@@ -18,7 +18,7 @@ using Serilog.Extensions.Hosting;
 
 namespace CRUDTests;
 
-public class PersonsServiceTests
+public class PersonsGetterServiceTests
 {
     private readonly IPersonsService _personsService;
     private readonly IPersonsRepository _personsRepository;
@@ -26,7 +26,7 @@ public class PersonsServiceTests
     private readonly ITestOutputHelper _testOutputHelper;
     private readonly IFixture _fixture;
 
-    public PersonsServiceTests(ITestOutputHelper testOutputHelper)
+    public PersonsGetterServiceTests(ITestOutputHelper testOutputHelper)
     {
         _fixture = new Fixture();
 

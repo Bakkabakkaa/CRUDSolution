@@ -17,12 +17,12 @@ using SerilogTimings;
 
 namespace Services;
 
-public class PersonsService : IPersonsService
+public class PersonsGetterService : IPersonsGetterService
 {
     private readonly IPersonsRepository _personsRepository;
-    private readonly ILogger<PersonsService> _logger;
+    private readonly ILogger<PersonsGetterService> _logger;
     private readonly IDiagnosticContext _diagnosticContext;
-    public PersonsService(IPersonsRepository personsRepository, ILogger<PersonsService> logger,
+    public PersonsGetterService(IPersonsRepository personsRepository, ILogger<PersonsGetterService> logger,
         IDiagnosticContext diagnosticContext)
     {
         _personsRepository = personsRepository;
@@ -30,35 +30,9 @@ public class PersonsService : IPersonsService
         _diagnosticContext = diagnosticContext;
     }
     
-    public async Task<PersonResponse> AddPerson(PersonAddRequest? personAddRequest)
-    {
-        // Check if PersonAddRequest is not null
-        if (personAddRequest == null)
-        {
-            throw new ArgumentNullException(nameof(personAddRequest));
-        }
-        
-        // Model validations
-        ValidationHelper.ModelValidation(personAddRequest);
-        
-        // Convert personAddRequest into Person type
-        Person person = personAddRequest.ToPerson();
-        
-        // Generate PersonID
-        person.PersonID = Guid.NewGuid();
-        
-        // Add person object to persons list 
-        await _personsRepository.AddPerson(person);
-        // _personsRepository.sp_InsertPerson(person);
-
-        // Convert the Person object into PersonResponse type
-        return person.ToPersonResponse();
-        
-    }
-
     public async Task<List<PersonResponse>> GetAllPersons()
     {
-        _logger.LogInformation("GetAllPersons of PersonsService");
+        _logger.LogInformation("GetAllPersons of PersonsGetterService");
         
         var persons = await _personsRepository.GetAllPersons();
         
@@ -85,7 +59,7 @@ public class PersonsService : IPersonsService
 
     public async Task<List<PersonResponse>> GetFilteredPersons(string searchBy, string? searchString)
     {
-        _logger.LogInformation("GetFilteredPersons of PersonsService");
+        _logger.LogInformation("GetFilteredPersons of PersonsGetterService");
 
         List<Person> persons;
 
@@ -125,123 +99,6 @@ public class PersonsService : IPersonsService
         _diagnosticContext.Set("Persons", persons);
         
         return persons.Select(temp => temp.ToPersonResponse()).ToList();
-    }
-
-    public async Task<List<PersonResponse>> GetSortedPersons(List<PersonResponse> allPerson, string sortBy, SortOrderOptions sortOrder)
-    {
-        _logger.LogInformation("GetSortedPersons of PersonsService");
-            
-        if (string.IsNullOrEmpty(sortBy))
-        {
-            return allPerson;
-        }
-
-        List<PersonResponse> sortedPerson = (sortBy, sortOrder)
-            switch
-            {
-                (nameof(PersonResponse.PersonName), SortOrderOptions.ASC) =>
-                    allPerson.OrderBy(temp => temp.PersonName, StringComparer.OrdinalIgnoreCase).ToList(),
-
-                (nameof(PersonResponse.PersonName), SortOrderOptions.DESC) =>
-                    allPerson.OrderByDescending(temp => temp.PersonName, StringComparer.OrdinalIgnoreCase).ToList(),
-
-                (nameof(PersonResponse.Email), SortOrderOptions.ASC) =>
-                    allPerson.OrderBy(temp => temp.Email, StringComparer.OrdinalIgnoreCase).ToList(),
-
-                (nameof(PersonResponse.Email), SortOrderOptions.DESC) =>
-                    allPerson.OrderByDescending(temp => temp.Email, StringComparer.OrdinalIgnoreCase).ToList(),
-
-                (nameof(PersonResponse.DateOfBirth), SortOrderOptions.ASC) =>
-                    allPerson.OrderBy(temp => temp.DateOfBirth).ToList(),
-
-                (nameof(PersonResponse.DateOfBirth), SortOrderOptions.DESC) =>
-                    allPerson.OrderByDescending(temp => temp.DateOfBirth).ToList(),
-
-                (nameof(PersonResponse.Age), SortOrderOptions.ASC) =>
-                    allPerson.OrderBy(temp => temp.Age).ToList(),
-
-                (nameof(PersonResponse.Age), SortOrderOptions.DESC) =>
-                    allPerson.OrderByDescending(temp => temp.Age).ToList(),
-
-                (nameof(PersonResponse.Gender), SortOrderOptions.ASC) =>
-                    allPerson.OrderBy(temp => temp.Gender, StringComparer.OrdinalIgnoreCase).ToList(),
-
-                (nameof(PersonResponse.Gender), SortOrderOptions.DESC) =>
-                    allPerson.OrderByDescending(temp => temp.Gender, StringComparer.OrdinalIgnoreCase).ToList(),
-
-                (nameof(PersonResponse.Country), SortOrderOptions.ASC) =>
-                    allPerson.OrderBy(temp => temp.Country, StringComparer.OrdinalIgnoreCase).ToList(),
-
-                (nameof(PersonResponse.Country), SortOrderOptions.DESC) =>
-                    allPerson.OrderByDescending(temp => temp.Country, StringComparer.OrdinalIgnoreCase).ToList(),
-
-                (nameof(PersonResponse.Address), SortOrderOptions.ASC) =>
-                    allPerson.OrderBy(temp => temp.Address, StringComparer.OrdinalIgnoreCase).ToList(),
-
-                (nameof(PersonResponse.Address), SortOrderOptions.DESC) =>
-                    allPerson.OrderByDescending(temp => temp.Address, StringComparer.OrdinalIgnoreCase).ToList(),
-
-                (nameof(PersonResponse.ReceiveNewsLetters), SortOrderOptions.ASC) =>
-                    allPerson.OrderBy(temp => temp.ReceiveNewsLetters).ToList(),
-
-                (nameof(PersonResponse.ReceiveNewsLetters), SortOrderOptions.DESC) =>
-                    allPerson.OrderByDescending(temp => temp.ReceiveNewsLetters).ToList(),
-
-                _ => allPerson
-            };
-
-        return sortedPerson;
-    }
-
-    public async Task<PersonResponse> UpdatePerson(PersonUpdateRequest? personUpdateRequest)
-    {
-        if (personUpdateRequest == null)
-        {
-            throw new ArgumentNullException(nameof(Person));
-        }
-        
-        // Validation
-        ValidationHelper.ModelValidation(personUpdateRequest);
-        
-        // Get matching person object to update
-        Person? matchingPerson = await _personsRepository.GetPersonByPersonID(personUpdateRequest.PersonID);
-        if (matchingPerson == null)
-        {
-            throw new InvalidPersonIDException("Given person id doesn't exist");
-        }
-        
-        // Update all details
-        matchingPerson.PersonName = personUpdateRequest.PersonName;
-        matchingPerson.Email = personUpdateRequest.Email;
-        matchingPerson.DateOfBirth = personUpdateRequest.DateOfBirth;
-        matchingPerson.Gender = personUpdateRequest.Gender.ToString();
-        matchingPerson.CountryID = personUpdateRequest.CountryID;
-        matchingPerson.Address = personUpdateRequest.Address;
-        matchingPerson.ReceiveNewsLetters = personUpdateRequest.ReceiveNewsLetters;
-
-        await _personsRepository.UpdatesPerson(matchingPerson);
-        
-        return matchingPerson.ToPersonResponse();
-    }
-
-    public async Task<bool> DeletePerson(Guid? personID)
-    {
-        if (personID == null)
-        {
-            throw new ArgumentNullException(nameof(personID));
-        }
-
-        Person? person = await _personsRepository.GetPersonByPersonID(personID.Value);
-        if (person != null)
-        {
-            
-            await _personsRepository.DeletePersonByPersonID(personID.Value);
-            return true;
-        }
-        else
-        {
-            return false;
-        }
     }
 
     public async Task<MemoryStream> GetPersonsCSV()
