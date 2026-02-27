@@ -18,15 +18,20 @@ using Serilog.Extensions.Hosting;
 
 namespace CRUDTests;
 
-public class PersonsGetterServiceTests
+public class PersonsServiceTest
 {
-    private readonly IPersonsService _personsService;
+    private readonly IPersonsGetterService _personsGetterService;
+    private readonly IPersonsAdderService _personsAdderService;
+    private readonly IPersonsDeleterService _personsDeleterService;
+    private readonly IPersonsSorterService _personsSorterService;
+    private readonly IPersonsUpdaterService _personsUpdaterService;
+    
     private readonly IPersonsRepository _personsRepository;
     private readonly Mock<IPersonsRepository> _personRepositoryMock;
     private readonly ITestOutputHelper _testOutputHelper;
     private readonly IFixture _fixture;
 
-    public PersonsGetterServiceTests(ITestOutputHelper testOutputHelper)
+    public PersonsServiceTest(ITestOutputHelper testOutputHelper)
     {
         _fixture = new Fixture();
 
@@ -34,9 +39,19 @@ public class PersonsGetterServiceTests
         _personsRepository = _personRepositoryMock.Object;
 
         var diagnosticContextMock = new Mock<IDiagnosticContext>();
-        var loggerMock = new Mock<ILogger<PersonsService>>();
         
-        _personsService = new PersonsService(_personsRepository, loggerMock.Object, diagnosticContextMock.Object);
+        var loggerMockGetterService = new Mock<ILogger<PersonsGetterService>>(); 
+        var loggerMockAdderService = new Mock<ILogger<PersonsAdderService>>(); 
+        var loggerMockDeleterService = new Mock<ILogger<PersonsDeleterService>>(); 
+        var loggerMockSorterService = new Mock<ILogger<PersonsSorterService>>(); 
+        var loggerMockUpdaterService = new Mock<ILogger<PersonsUpdaterService>>(); 
+        
+        
+        _personsGetterService = new PersonsGetterService(_personsRepository, loggerMockGetterService.Object, diagnosticContextMock.Object);
+        _personsAdderService = new PersonsAdderService(_personsRepository, loggerMockAdderService.Object, diagnosticContextMock.Object);
+        _personsDeleterService = new PersonsDeleterService(_personsRepository, loggerMockDeleterService.Object, diagnosticContextMock.Object);
+        _personsSorterService = new PersonsSorterService(_personsRepository, loggerMockSorterService.Object, diagnosticContextMock.Object);
+        _personsUpdaterService = new PersonsUpdaterService(_personsRepository, loggerMockUpdaterService.Object, diagnosticContextMock.Object);
         
         _testOutputHelper = testOutputHelper;
     }
@@ -52,7 +67,7 @@ public class PersonsGetterServiceTests
         PersonAddRequest? personAddRequest = null;
         
         //Act
-        Func<Task> action = async () => await _personsService.AddPerson(personAddRequest);
+        Func<Task> action = async () => await _personsAdderService.AddPerson(personAddRequest);
 
         await action.Should().ThrowAsync<ArgumentNullException>();
     }
@@ -74,7 +89,7 @@ public class PersonsGetterServiceTests
             .ReturnsAsync(person);
         
         // Assert
-        Func<Task> action = async () => await _personsService.AddPerson(personAddRequest);
+        Func<Task> action = async () => await _personsAdderService.AddPerson(personAddRequest);
 
         await action.Should().ThrowAsync<ArgumentException>();
 
@@ -102,7 +117,7 @@ public class PersonsGetterServiceTests
             .ReturnsAsync(person);
             
         //Act
-        PersonResponse person_response_from_add = await _personsService.AddPerson(personAddRequest);
+        PersonResponse person_response_from_add = await _personsAdderService.AddPerson(personAddRequest);
         person_response_expected.PersonID = person_response_from_add.PersonID;
         
         // Assert
@@ -123,7 +138,7 @@ public class PersonsGetterServiceTests
         Guid? personID = null;
         
         // Act
-        PersonResponse? person_response_from_get = await _personsService.GetPersonByPersonID(personID);
+        PersonResponse? person_response_from_get = await _personsGetterService.GetPersonByPersonID(personID);
         
         // Assert 
         // Assert.Null(person_response_from_get);
@@ -147,7 +162,7 @@ public class PersonsGetterServiceTests
             .ReturnsAsync(person);
 
         // Act
-        PersonResponse? person_response_from_get = await _personsService.GetPersonByPersonID(person.PersonID);
+        PersonResponse? person_response_from_get = await _personsGetterService.GetPersonByPersonID(person.PersonID);
 
         // Assert
         // Assert.Equal(person_response_from_add, person_response_from_get);
@@ -167,7 +182,7 @@ public class PersonsGetterServiceTests
             .ReturnsAsync(persons);
         
         // Act
-        List<PersonResponse> persons_from_get = await _personsService.GetAllPersons();
+        List<PersonResponse> persons_from_get = await _personsGetterService.GetAllPersons();
         
         // Assert
         // Assert.Empty(persons_from_get);
@@ -214,7 +229,7 @@ public class PersonsGetterServiceTests
             .ReturnsAsync(persons);
         
         // Act
-        List<PersonResponse> person_list_from_get = await _personsService.GetAllPersons();
+        List<PersonResponse> person_list_from_get = await _personsGetterService.GetAllPersons();
         
         // Print person_response_list_fron_get
         _testOutputHelper.WriteLine("Actual:");
@@ -275,7 +290,7 @@ public class PersonsGetterServiceTests
         
         // Act
         List<PersonResponse> person_list_from_search = await 
-            _personsService.GetFilteredPersons(nameof(Person.PersonName), "");
+            _personsGetterService.GetFilteredPersons(nameof(Person.PersonName), "");
         
         // Print person_response_list_fron_get
         _testOutputHelper.WriteLine("Actual:");
@@ -332,7 +347,7 @@ public class PersonsGetterServiceTests
         
         // Act
         List<PersonResponse> person_list_from_search = await 
-            _personsService.GetFilteredPersons(nameof(Person.PersonName), "sa");
+            _personsGetterService.GetFilteredPersons(nameof(Person.PersonName), "sa");
         
         // Print person_response_list_fron_get
         _testOutputHelper.WriteLine("Actual:");
@@ -392,10 +407,10 @@ public class PersonsGetterServiceTests
             _testOutputHelper.WriteLine(person_response_from_add.ToString());
         }
 
-        List<PersonResponse> allPersons = await _personsService.GetAllPersons();
+        List<PersonResponse> allPersons = await _personsGetterService.GetAllPersons();
         // Act
         List<PersonResponse> person_list_from_sort = await 
-            _personsService.GetSortedPersons(allPersons, nameof(Person.PersonName), SortOrderOptions.DESC);
+            _personsSorterService.GetSortedPersons(allPersons, nameof(Person.PersonName), SortOrderOptions.DESC);
         
         // Print person_response_list_fron_sort
         _testOutputHelper.WriteLine("Actual:");
@@ -430,7 +445,7 @@ public class PersonsGetterServiceTests
 
         Func<Task> action = async () =>
         {
-            await _personsService.UpdatePerson(person_update_request);
+            await _personsUpdaterService.UpdatePerson(person_update_request);
         };
 
         await action.Should().ThrowAsync<ArgumentNullException>();
@@ -453,7 +468,7 @@ public class PersonsGetterServiceTests
 
         Func<Task> action = async () =>
         {
-            await _personsService.UpdatePerson(person_update_request);
+            await _personsUpdaterService.UpdatePerson(person_update_request);
         };
 
         await action.Should().ThrowAsync<ArgumentException>();
@@ -484,7 +499,7 @@ public class PersonsGetterServiceTests
 
         Func<Task> action = async () =>
         {
-            await _personsService.UpdatePerson(person_update_request);
+            await _personsUpdaterService.UpdatePerson(person_update_request);
         };
 
         await action.Should().ThrowAsync<ArgumentException>();
@@ -511,7 +526,7 @@ public class PersonsGetterServiceTests
             .ReturnsAsync(person);
         
         // Act
-        PersonResponse person_response_from_update = await _personsService.UpdatePerson(person_update_request);
+        PersonResponse person_response_from_update = await _personsUpdaterService.UpdatePerson(person_update_request);
         
         // Assert
         // Assert.Equal(person_response_from_get, person_response_from_update);
@@ -543,7 +558,7 @@ public class PersonsGetterServiceTests
             .ReturnsAsync(person);
         
         // Act
-        bool isDeleted = await _personsService.DeletePerson(person.PersonID);
+        bool isDeleted = await _personsDeleterService.DeletePerson(person.PersonID);
         
         // Assert
         // Assert.True(isDeleted);
@@ -556,7 +571,7 @@ public class PersonsGetterServiceTests
     public async Task DeletePerson_InvalidPersonID()
     {
         // Act
-        bool isDeleted = await _personsService.DeletePerson(Guid.NewGuid());
+        bool isDeleted = await _personsDeleterService.DeletePerson(Guid.NewGuid());
         
         // Assert
         // Assert.False(isDeleted);
