@@ -40,7 +40,8 @@ public class AccountController : Controller
             UserName = registerDto.Email, PersonName = registerDto.PersonName
         };
 
-        IdentityResult result = await _userManager.CreateAsync(user);
+        IdentityResult result = await _userManager.CreateAsync(user, registerDto.Password);
+        
         if (result.Succeeded)
         {
             return RedirectToAction(nameof(PersonsController.Index), "Persons");
