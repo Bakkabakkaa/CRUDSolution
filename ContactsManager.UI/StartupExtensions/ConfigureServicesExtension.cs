@@ -1,5 +1,8 @@
+using ContactsManager.Core.Domain.IdentityEntities;
 using CRUDSolution.Filters.ActionFilters;
 using Entities;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Repositories;
 using RepositoryContracts;
@@ -43,6 +46,12 @@ public static class ConfigureServicesExtension
         {
             options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
         });
+        // Enable Identity in this project
+        services.AddIdentity<ApplicationUser, ApplicationRole>()
+            .AddEntityFrameworkStores<ApplicationDbContext>()
+            .AddDefaultTokenProviders()
+            .AddUserStore<UserStore<ApplicationUser, ApplicationRole, ApplicationDbContext, Guid>>()
+            .AddRoleStore<RoleStore<ApplicationRole, ApplicationDbContext, Guid>>();
 
         services.AddTransient<PersonsListActionFilter>();
 
