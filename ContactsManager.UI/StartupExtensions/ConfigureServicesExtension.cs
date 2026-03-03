@@ -1,6 +1,7 @@
 using ContactsManager.Core.Domain.IdentityEntities;
 using CRUDSolution.Filters.ActionFilters;
 using Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -38,10 +39,8 @@ public static class ConfigureServicesExtension
         services.AddScoped<IPersonsSorterService, PersonsSorterService>();
         services.AddScoped<ICountriesRepository, CountriesRepository>();
         services.AddScoped<IPersonsRepository, PersonsRepository>();
-        services.AddHttpLogging(options =>
-        {
-            options.LoggingFields = Microsoft.AspNetCore.HttpLogging.HttpLoggingFields.RequestProperties | Microsoft.AspNetCore.HttpLogging.HttpLoggingFields.ResponsePropertiesAndHeaders;
-        }); 
+        
+        services.AddTransient<PersonsListActionFilter>();
         services.AddDbContext<ApplicationDbContext>(options =>
         {
             options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
@@ -60,9 +59,22 @@ public static class ConfigureServicesExtension
             .AddDefaultTokenProviders()
             .AddUserStore<UserStore<ApplicationUser, ApplicationRole, ApplicationDbContext, Guid>>()
             .AddRoleStore<RoleStore<ApplicationRole, ApplicationDbContext, Guid>>();
+        
+        services.AddAuthorization(options =>
+        {
+            options.FallbackPolicy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build(); //enforces authoriation policy (user must be authenticated) for all the action methods
+        });
 
-        services.AddTransient<PersonsListActionFilter>();
-
+        services.ConfigureApplicationCookie(options => {
+            options.LoginPath = "/Account/Login";
+        });
+        
+        services.AddHttpLogging(options =>
+        {
+            options.LoggingFields = Microsoft.AspNetCore.HttpLogging.HttpLoggingFields.RequestProperties | Microsoft.AspNetCore.HttpLogging.HttpLoggingFields.ResponsePropertiesAndHeaders;
+        });
+        
+        
         return services;
     }
 }
