@@ -62,4 +62,41 @@ public class AccountController : Controller
         return View(registerDto);
         // TO DO: Store user registration details into Identity database
     }
+
+    [HttpGet]
+    public IActionResult Login()
+    {
+        return View();
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Login(LoginDTO loginDto)
+    {
+        if (!ModelState.IsValid)
+        {
+            ViewBag.Errors = ModelState.Values
+                .SelectMany(temp => temp.Errors)
+                .Select(temp => temp.ErrorMessage);
+            
+            return View(loginDto);
+        }
+
+        var result = await _signInManager.PasswordSignInAsync(loginDto.Email, loginDto.Password,
+            isPersistent: false, lockoutOnFailure: false);
+
+        if (result.Succeeded)
+        {
+            return RedirectToAction(nameof(PersonsController.Index), "Persons");
+        }
+        
+        ModelState.AddModelError("Login", "Invalid email or password");
+        return View(loginDto);
+    }
+
+    public async Task<IActionResult> Logout()
+    {
+        await _signInManager.SignOutAsync();
+        
+        return RedirectToAction(nameof(PersonsController.Index), "Persons");
+    }
 }
