@@ -1,7 +1,5 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CRUDTests", "CRUDTests\CRUDTests.csproj", "{244285BE-085B-44C6-9633-9ABBD1286ECE}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{147A1477-5C67-40E3-B0FD-9DE54C051EC7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContactsManager.Core", "ContactsManager.Core\ContactsManager.Core.csproj", "{0749733F-BBF2-4B30-AD2A-E5F301B1D783}"
@@ -24,10 +22,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{244285BE-085B-44C6-9633-9ABBD1286ECE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{244285BE-085B-44C6-9633-9ABBD1286ECE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{244285BE-085B-44C6-9633-9ABBD1286ECE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{244285BE-085B-44C6-9633-9ABBD1286ECE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0749733F-BBF2-4B30-AD2A-E5F301B1D783}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0749733F-BBF2-4B30-AD2A-E5F301B1D783}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0749733F-BBF2-4B30-AD2A-E5F301B1D783}.Release|Any CPU.ActiveCfg = Release|Any CPU
