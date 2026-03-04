@@ -3,6 +3,7 @@ using ContactsManager.Core.DTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using ServiceContracts.Enums;
 
 namespace CRUDSolution.Controllers;
 
@@ -12,12 +13,14 @@ public class AccountController : Controller
 {
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly SignInManager<ApplicationUser> _signInManager;
+    private readonly RoleManager<ApplicationRole> _roleManager;
 
     public AccountController(UserManager<ApplicationUser> userManager,
-        SignInManager<ApplicationUser> signInManager)
+        SignInManager<ApplicationUser> signInManager, RoleManager<ApplicationRole> roleManager)
     {
         _userManager = userManager;
         _signInManager = signInManager;
+        _roleManager = roleManager;
     }
     
     [HttpGet]
@@ -49,6 +52,27 @@ public class AccountController : Controller
         
         if (result.Succeeded)
         {
+            // Check status of radio button
+            if (registerDto.UserType == UserTypeOptions.Admin)
+            {
+                // Create "Admin" role
+                if (await _roleManager.FindByNameAsync(UserTypeOptions.Admin.ToString()) is null)
+                {
+                    ApplicationRole applicationRole = new ApplicationRole()
+                    {
+                        Name = UserTypeOptions.Admin.ToString()
+                    };
+                    await _roleManager.CreateAsync(applicationRole);
+                }
+                
+                // Add the new user into "Admin" role
+                await _userManager.AddToRoleAsync(user, UserTypeOptions.Admin.ToString());
+            }
+            else
+            {
+                // Add the new user into "User" role
+                await _userManager.AddToRoleAsync(user, UserTypeOptions.User.ToString());
+            }
             // Sign in
             await _signInManager.SignInAsync(user, isPersistent: false);
             return RedirectToAction(nameof(PersonsController.Index), "Persons");
