@@ -8,7 +8,7 @@ using ServiceContracts.Enums;
 namespace CRUDSolution.Controllers;
 
 [Route("[controller]/[action]")]
-[AllowAnonymous]
+// [AllowAnonymous]
 public class AccountController : Controller
 {
     private readonly UserManager<ApplicationUser> _userManager;
@@ -24,12 +24,14 @@ public class AccountController : Controller
     }
     
     [HttpGet]
+    [Authorize("NotAuthorized")]
     public IActionResult Register()
     {
         return View();
     }
 
     [HttpPost]
+    [Authorize("NotAuthorized")]
     public async Task<IActionResult> Register(RegisterDTO registerDto)
     {
         // Check for validation errors
@@ -90,12 +92,14 @@ public class AccountController : Controller
     }
 
     [HttpGet]
+    [Authorize("NotAuthorized")]
     public IActionResult Login()
     {
         return View();
     }
 
     [HttpPost]
+    [Authorize("NotAuthorized")]
     public async Task<IActionResult> Login(LoginDTO loginDto, string? ReturnUrl)
     {
         if (!ModelState.IsValid)
