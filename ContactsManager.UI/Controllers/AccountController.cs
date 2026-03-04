@@ -72,7 +72,7 @@ public class AccountController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> Login(LoginDTO loginDto)
+    public async Task<IActionResult> Login(LoginDTO loginDto, string? ReturnUrl)
     {
         if (!ModelState.IsValid)
         {
@@ -88,6 +88,10 @@ public class AccountController : Controller
 
         if (result.Succeeded)
         {
+            if (!string.IsNullOrEmpty(ReturnUrl) && Url.IsLocalUrl(ReturnUrl))
+            {
+                return LocalRedirect(ReturnUrl);
+            }
             return RedirectToAction(nameof(PersonsController.Index), "Persons");
         }
         
