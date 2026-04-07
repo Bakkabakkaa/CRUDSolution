@@ -31,7 +31,9 @@ public static class ConfigureServicesExtension
         });
 
 // Add services into IoC container
-        services.AddScoped<ICountriesService, CountriesService>();
+        services.AddScoped<ICountriesGetterService, CountriesGetterService>();
+        services.AddScoped<ICountriesAdderService, CountriesAdderService>();
+        services.AddScoped<ICountriesUploaderService, CountriesUploaderService>();
         services.AddScoped<IPersonsGetterService, PersonsGetterService>();
         services.AddScoped<IPersonsAdderService, PersonsAdderService>();
         services.AddScoped<IPersonsDeleterService, PersonsDeleterService>();

@@ -8,13 +8,13 @@ namespace CRUDSolution.Filters.ActionFilters;
 
 public class PersonCreateAndEditPostActionFilter : IAsyncActionFilter
 {
-    private readonly ICountriesService _countriesService;
+    private readonly ICountriesGetterService _countriesGetterService;
     private readonly ILogger<PersonCreateAndEditPostActionFilter> _logger;
 
-    public PersonCreateAndEditPostActionFilter(ICountriesService countriesService,
+    public PersonCreateAndEditPostActionFilter(ICountriesGetterService countriesGetterService,
         ILogger<PersonCreateAndEditPostActionFilter> logger)
     {
-        _countriesService = countriesService;
+        _countriesGetterService = countriesGetterService;
         _logger = logger;
     }
     
@@ -25,7 +25,7 @@ public class PersonCreateAndEditPostActionFilter : IAsyncActionFilter
         {
             if (!personsController.ModelState.IsValid)
             {
-                List<CountryResponse> countries = await _countriesService.GetAllCountries();
+                List<CountryResponse> countries = await _countriesGetterService.GetAllCountries();
                 personsController.ViewBag.Countries = countries.Select(temp =>
                     new SelectListItem() { Text = temp.CountryName, Value = temp.CountryID.ToString() });
 

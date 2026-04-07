@@ -29,19 +29,19 @@ public class PersonsController : Controller
     private readonly IPersonsDeleterService _personsDeleterService;
     private readonly IPersonsUpdaterService _personsUpdaterService;
     
-    private readonly ICountriesService _countriesService;
+    private readonly ICountriesGetterService _countriesGetterService;
     private readonly ILogger<PersonsController> _logger;
 
     public PersonsController(IPersonsGetterService personsGetterService, IPersonsAdderService personsAdderService, 
         IPersonsSorterService personsSorterService, IPersonsDeleterService personsDeleterService,
-        IPersonsUpdaterService personsUpdaterService, ICountriesService countriesService, ILogger<PersonsController> logger)
+        IPersonsUpdaterService personsUpdaterService, ICountriesGetterService countriesGetterService, ILogger<PersonsController> logger)
     {
         _personsGetterService = personsGetterService;
         _personsAdderService = personsAdderService;
         _personsSorterService = personsSorterService;
         _personsDeleterService = personsDeleterService;
         _personsUpdaterService = personsUpdaterService;
-        _countriesService = countriesService;
+        _countriesGetterService = countriesGetterService;
         _logger = logger;
     }
     
@@ -80,7 +80,7 @@ public class PersonsController : Controller
     [ResponseHeaderFilteredFactory("my-key", "my-value", 4)]
     public async Task<IActionResult> Create()
     {
-        List<CountryResponse> countries = await _countriesService.GetAllCountries();
+        List<CountryResponse> countries = await _countriesGetterService.GetAllCountries();
         ViewBag.Countries = countries.Select(temp => new SelectListItem()
         {
             Text = temp.CountryName, Value = temp.CountryID.ToString()
@@ -116,7 +116,7 @@ public class PersonsController : Controller
 
         PersonUpdateRequest personUpdateRequest = personResponse.ToPersonUpdateRequest();
         
-        List<CountryResponse> countries = await _countriesService.GetAllCountries();
+        List<CountryResponse> countries = await _countriesGetterService.GetAllCountries();
         ViewBag.Countries = countries.Select(temp => new SelectListItem()
         {
             Text = temp.CountryName, Value = temp.CountryID.ToString()
