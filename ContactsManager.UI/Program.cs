@@ -1,12 +1,5 @@
 using CRUDSolution;
-using CRUDSolution.Filters.ActionFilters;
-using Entities;
-using Microsoft.EntityFrameworkCore;
 using OfficeOpenXml;
-using ServiceContracts;
-using Services;
-using RepositoryContracts;
-using Repositories;
 using Serilog;
 using CRUDSolution.Middleware;
 
